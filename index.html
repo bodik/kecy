@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>milujiflab.cz</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+	<link href="app.css" rel="stylesheet">
+
+	<script id="tile_row-template" type="text/x-handlebars-template">
+		<div class="row">
+			{{#each items}}
+			<div class="col-md-4">
+ 				<div class="tile">
+					{{ this.title }}
+					<audio preload="none">
+						<source src="audio/{{ this.file }}" type="audio/mpeg">
+					</audio>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+	</script>
+
+	<script type="text/javascript">
+		toastr.options.timeOut = 5000;
+		var tile_row_hbs = Handlebars.compile(document.getElementById('tile_row-template').innerHTML);
+		var chunk = 3;
+
+		$(document).ready(function() {
+			$.ajax('audio/files.json')
+				.done(function(tiles) {
+					console.log(tiles);
+					for (var i = 0; i < tiles.length; i += chunk) {
+						$('#tiles').append(tile_row_hbs({'items': tiles.slice(i, i+chunk)}));
+					}
+
+					$('.tile').on('click', function(event) {
+						$(event.target).find('audio')[0].play();
+					});
+				})
+				.fail(function() {
+					toastr.error('Failed to load audio metadata.')
+				});
+		});
+	</script>
+</head>
+
+<body>
+
+<div class="container">
+	<div class="header clearfix">
+		<nav>
+			<ul class="nav nav-pills pull-right">
+				<!--
+	    			<li role="presentation"><a href="#">Home</a></li>
+				<li role="presentation"><a href="#">About</a></li>
+				-->
+			</ul>
+		</nav>
+		<h3 class="text-muted">milujiflab.cz</h3>
+	</div>
+
+	<div class="jumbotron">
+		<h1>Miluji FLAB</h1>
+		<p>Just a bunch of barks inspired by <a href="http://milujipraci.cz">milujipraci.cz</a>.</p>
+	</div>
+
+	<div id="tiles">
+	</div>
+
+	<div class="footer">
+		<p>&copy; 2019 milujiflab.cz</p>
+	</div>
+</div> <!-- /container -->
+
+</body>
+</html>
