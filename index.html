@@ -18,7 +18,7 @@
 	<script id="tile_row-template" type="text/x-handlebars-template">
 		<div class="row">
 			{{#each items}}
-			<div class="col-md-4">
+			<div class="col-md-{{ ../column_size }}">
  				<div class="tile">
 					{{ this.title }}
 					<audio preload="none">
@@ -33,14 +33,14 @@
 	<script type="text/javascript">
 		toastr.options.timeOut = 5000;
 		var tile_row_hbs = Handlebars.compile(document.getElementById('tile_row-template').innerHTML);
-		var chunk = 3;
+		var chunk = 4;
 
 		$(document).ready(function() {
 			$.ajax('audio/files.json')
 				.done(function(tiles) {
 					console.log(tiles);
 					for (var i = 0; i < tiles.length; i += chunk) {
-						$('#tiles').append(tile_row_hbs({'items': tiles.slice(i, i+chunk)}));
+						$('#tiles').append(tile_row_hbs({'items': tiles.slice(i, i+chunk), 'column_size': 12/chunk}));
 					}
 
 					$('.tile').on('click', function(event) {

@@ -53,10 +53,11 @@ body {
 
 /* other styles */
 .tile {
-	width: 10em;
-	height: 10em;
+	width: 9em;
+	height: 9em;
 	background-color: #aaaaaa;
 	margin: auto;
+	margin-bottom: 10px;
 
 	display: flex;
 	align-items: center;
